@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import AddTodoInput from "./components/AddTodoInput";
+import TodoItem from "./components/TodoItem";
 
 
 export default function Home() {
@@ -32,7 +33,7 @@ const [todos, setTodos] = useState<Todo[]>(initialData);
         <h1>Todo List</h1>
         <AddTodoInput />
         {todos.map((todo) => (
-          <h1 key={todo.id}>{todo.label}</h1>
+          <TodoItem key={todo.id} todo={todo} />
         ))}
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
