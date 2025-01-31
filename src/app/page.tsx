@@ -4,22 +4,6 @@ import { v4 as uuid } from "uuid";
 import AddTodoInput from "./components/AddTodoInput";
 import TodoItem from "./components/TodoItem";
 
-const loadTodos = (): Todo[] => {
-  if (typeof window !== "undefined") {
-    const savedTodos = localStorage.getItem("todos");
-    if (savedTodos) {
-      return JSON.parse(savedTodos);
-    }
-  }
-  return initialData;
-};
-
-const saveTodos = (todos: Todo[]) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }
-};
-
 const initialData: Todo[] = [
   {
     id: uuid(),
@@ -38,9 +22,29 @@ const initialData: Todo[] = [
   },
 ];
 
+const loadTodos = (): Todo[] => {
+  if (typeof window !== "undefined") {
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+      return JSON.parse(savedTodos);
+    }
+  }
+  return initialData;
+};
+
+const saveTodos = (todos: Todo[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }
+};
+
 export default function Home() {
-  const localStorageTodos = loadTodos();
-  const [todos, setTodos] = useState<Todo[]>(localStorageTodos);
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    const localStorageTodos = loadTodos();
+    setTodos(localStorageTodos);
+  }, []);
 
   useEffect(() => {
     saveTodos(todos);
