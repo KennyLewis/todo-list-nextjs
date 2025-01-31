@@ -5,19 +5,15 @@ import AddTodoInput from "./components/AddTodoInput";
 import TodoItem from "./components/TodoItem";
 
 const loadTodos = (): Todo[] => {
-  if (typeof window !== "undefined") {
-    const savedTodos = localStorage.getItem("todos");
-    if (savedTodos) {
-      return JSON.parse(savedTodos);
-    }
+  const savedTodos = localStorage.getItem("todos");
+  if (savedTodos) {
+    return JSON.parse(savedTodos);
   }
   return initialData;
 };
 
 const saveTodos = (todos: Todo[]) => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }
+  localStorage.setItem("todos", JSON.stringify(todos));
 };
 
 const initialData: Todo[] = [
