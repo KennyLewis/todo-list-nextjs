@@ -1,29 +1,50 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import AddTodoInput from "./components/AddTodoInput";
 import TodoItem from "./components/TodoItem";
 
-export default function Home() {
-  const initialData: Todo[] = [
-    {
-      id: uuid(),
-      label: "Check email",
-      checked: true,
-    },
-    {
-      id: uuid(),
-      label: "Schedule meeting with team",
-      checked: false,
-    },
-    {
-      id: uuid(),
-      label: "Eat lunch",
-      checked: false,
-    },
-  ];
+const loadTodos = (): Todo[] => {
+  if (typeof window !== "undefined") {
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+      return JSON.parse(savedTodos);
+    }
+  }
+  return initialData;
+};
 
-  const [todos, setTodos] = useState<Todo[]>(initialData);
+const saveTodos = (todos: Todo[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }
+};
+
+const initialData: Todo[] = [
+  {
+    id: uuid(),
+    label: "Check email",
+    checked: true,
+  },
+  {
+    id: uuid(),
+    label: "Schedule meeting with team",
+    checked: false,
+  },
+  {
+    id: uuid(),
+    label: "Eat lunch",
+    checked: false,
+  },
+];
+
+export default function Home() {
+  const localStorageTodos = loadTodos();
+  const [todos, setTodos] = useState<Todo[]>(localStorageTodos);
+
+  useEffect(() => {
+    saveTodos(todos);
+  }, [todos]);
 
   const handleAddTodo = useCallback((label: string) => {
     setTodos((prev) => [
